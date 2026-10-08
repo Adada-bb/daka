@@ -1,416 +1,1245 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="学习打卡">
-<title>学习打卡</title>
-<style>
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { margin: 0; font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
-         background: #fef6e4; color: #333; padding-bottom: 40px; }
-  .header { background: #f9c74f; padding: 24px 20px 16px; text-align: center;
-            border-radius: 0 0 28px 28px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
-  .header h1 { margin: 0; font-size: 26px; }
-  .header .date { font-size: 16px; margin-top: 6px; opacity: .8; }
-  .header .type { display: inline-block; margin-top: 8px; padding: 4px 14px; background: #fff;
-                  border-radius: 20px; font-size: 15px; }
-  .progress { margin: 18px 20px 6px; height: 18px; background: #fff; border-radius: 10px; overflow: hidden;
-              border: 2px solid #f9c74f; }
-  .progress > div { height: 100%; background: #90be6d; width: 0; transition: width .4s; }
-  .stars { text-align: center; font-size: 18px; margin-bottom: 10px; }
-  .list { padding: 0 16px; }
-  .task { display: flex; align-items: center; background: #fff; border-radius: 20px; padding: 14px 16px;
-          margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 3px solid transparent; }
-  .task.done { background: #e9f5db; border-color: #90be6d; }
-  .task .emoji { font-size: 38px; margin-right: 14px; }
-  .task .info { flex: 1; }
-  .task .name { font-size: 20px; font-weight: 600; }
-  .task.done .name { text-decoration: line-through; opacity: .6; }
-  .task .min { font-size: 14px; color: #888; margin-top: 2px; }
-  .btn { border: none; border-radius: 16px; padding: 12px 16px; font-size: 18px; font-weight: 600;
-         color: #fff; margin-left: 8px; }
-  .btn-check { background: #f9844a; min-width: 72px; }
-  .task.done .btn-check { background: #90be6d; }
-  .btn-timer { background: #577590; }
-  .timer-box { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: rgba(0,0,0,.85);
-               color: #fff; display: none; text-align: center; padding-top: 22vh; z-index: 99; }
-  .timer-box .big { font-size: 90px; font-weight: 700; letter-spacing: 4px; }
-  .timer-box .tname { font-size: 26px; margin-bottom: 12px; }
-  .timer-box .btn { margin-top: 30px; font-size: 20px; padding: 14px 30px; }
-  .celebrate { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: rgba(255,240,200,.97);
-               display: none; text-align: center; padding-top: 20vh; z-index: 98; }
-  .celebrate .big { font-size: 110px; }
-  .celebrate h2 { font-size: 32px; margin: 10px 0; }
-  .week { display: flex; justify-content: space-around; margin: 16px 16px 0; background: #fff;
-          border-radius: 20px; padding: 12px 6px; }
-  .week .d { text-align: center; font-size: 14px; color: #666; }
-  .week .d b { display: block; font-size: 16px; color: #333; }
-  .week .d span { display: block; font-size: 18px; margin-top: 4px; }
-  .week .d.today { color: #f9844a; font-weight: 700; }
-  .muzzy { margin: 14px 16px 0; background: #fff; border-radius: 20px; padding: 14px 12px; }
-  .muzzy .title { font-size: 18px; font-weight: 700; text-align: center; }
-  .muzzy .hint { font-size: 14px; color: #666; text-align: center; margin: 4px 0 10px; }
-  .muzzy .eps { display: flex; flex-wrap: wrap; justify-content: center; }
-  .muzzy .ep { width: 15%; min-width: 60px; margin: 4px 1.5%; background: #fef6e4; border-radius: 14px;
-               padding: 8px 2px; text-align: center; border: 3px solid transparent; }
-  .muzzy .ep.next { border-color: #f9844a; }
-  .muzzy .ep.full { background: #e9f5db; }
-  .muzzy .ep b { display: block; font-size: 15px; }
-  .muzzy .ep span { display: block; font-size: 13px; margin-top: 4px; min-height: 18px; }
-  .foot { text-align: center; margin-top: 18px; }
-  .foot button { background: transparent; border: none; color: #999; font-size: 13px; padding: 10px; }
-  .settings { display: none; padding: 16px; }
-  .settings h3 { margin: 12px 0 6px; }
-  .settings textarea { width: 100%; height: 150px; font-size: 14px; border-radius: 10px;
-                       border: 2px solid #ddd; padding: 8px; }
-  .settings .tip { font-size: 13px; color: #777; }
-  .settings .row { margin: 10px 0; }
-  .settings select, .settings input { font-size: 16px; padding: 6px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="学习打卡">
+  <title>学习打卡</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding-bottom: 35px;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+      background: #fff7e8;
+      color: #333;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    /* 顶部 */
+    .header {
+      background: linear-gradient(135deg, #f9c74f, #f9844a);
+      color: #4a3423;
+      padding: 20px 16px 16px;
+      text-align: center;
+      border-radius: 0 0 26px 26px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .date-row {
+      margin-top: 12px;
+    }
+
+    .date-row input {
+      padding: 7px 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background: #fff;
+      color: #333;
+    }
+
+    .day-type {
+      display: inline-block;
+      margin-top: 9px;
+      padding: 4px 13px;
+      background: rgba(255,255,255,.85);
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    /* 进度 */
+    .progress-wrap {
+      height: 18px;
+      margin: 16px 18px 6px;
+      background: #fff;
+      border: 2px solid #f9c74f;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #90be6d;
+      transition: width .35s;
+    }
+
+    .progress-text {
+      margin: 4px 0 12px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .tip-box {
+      margin: 0 16px 12px;
+      padding: 10px 14px;
+      background: #fff;
+      border-radius: 15px;
+      color: #666;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* 任务 */
+    .task-list {
+      padding: 0 14px;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 12px;
+      background: #fff;
+      border: 3px solid transparent;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .task.done {
+      background: #e8f6dc;
+      border-color: #90be6d;
+    }
+
+    .task-time {
+      width: 44px;
+      flex-shrink: 0;
+      color: #777;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .task-emoji {
+      flex-shrink: 0;
+      font-size: 30px;
+    }
+
+    .task-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-name {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .task.done .task-name {
+      opacity: .55;
+      text-decoration: line-through;
+    }
+
+    .task-duration {
+      margin-top: 3px;
+      color: #888;
+      font-size: 13px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 13px;
+      padding: 10px 10px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .btn-timer {
+      background: #577590;
+    }
+
+    .btn-check {
+      background: #f9844a;
+    }
+
+    .task.done .btn-check {
+      background: #90be6d;
+    }
+
+    .finish-box {
+      display: none;
+      margin: 15px 16px 0;
+      padding: 15px;
+      background: #e8f6dc;
+      border: 3px solid #90be6d;
+      border-radius: 18px;
+      color: #3f6a29;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* 每周星星 */
+    .week-card {
+      margin: 15px 16px 0;
+      padding: 15px 14px;
+      background: #fff;
+      border-radius: 19px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      text-align: center;
+    }
+
+    .week-title {
+      color: #577590;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .week-date {
+      margin-top: 4px;
+      color: #888;
+      font-size: 13px;
+    }
+
+    .week-stars {
+      margin-top: 10px;
+      color: #f9844a;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .week-rate {
+      margin-top: 7px;
+      color: #666;
+      font-size: 15px;
+    }
+
+    .week-mini-bar {
+      width: 90%;
+      height: 12px;
+      margin: 10px auto 0;
+      overflow: hidden;
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+
+    .week-mini-bar-inner {
+      height: 100%;
+      background: #90be6d;
+      transition: width .35s;
+    }
+
+    .week-days {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 12px;
+    }
+
+    .week-day {
+      width: 13%;
+      color: #888;
+      font-size: 12px;
+    }
+
+    .week-day.today {
+      color: #f9844a;
+      font-weight: 800;
+    }
+
+    .week-day b {
+      display: block;
+      margin-bottom: 3px;
+      color: #444;
+      font-size: 14px;
+    }
+
+    /* 底部家长按钮 */
+    .foot {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .parent-btn {
+      padding: 10px;
+      border: none;
+      background: transparent;
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* 计时器 */
+    .timer-mask,
+    .editor-mask {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+    }
+
+    .timer-mask.show,
+    .editor-mask.show {
+      display: block;
+    }
+
+    .timer-mask {
+      background: rgba(0,0,0,.86);
+    }
+
+    .timer-content {
+      padding: 18vh 20px 20px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .timer-title {
+      font-size: 25px;
+      line-height: 1.4;
+    }
+
+    .timer-number {
+      margin: 20px 0 8px;
+      font-size: 82px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .timer-tip {
+      min-height: 26px;
+      color: #ddd;
+      font-size: 16px;
+    }
+
+    .timer-content .btn {
+      margin: 16px 4px 0;
+      padding: 14px 20px;
+      font-size: 18px;
+    }
+
+    .btn-finish {
+      background: #90be6d;
+    }
+
+    .btn-cancel {
+      background: #777;
+    }
+
+    /* 家长编辑页 */
+    .editor-mask {
+      overflow-y: auto;
+      background: #fff7e8;
+      color: #333;
+    }
+
+    .editor-header {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      padding: 14px;
+      background: #f9c74f;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .editor-header h2 {
+      margin: 0 0 9px;
+      font-size: 22px;
+    }
+
+    .editor-date {
+      padding: 7px 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .editor-tip {
+      margin: 14px 16px 8px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .editor-list {
+      padding: 0 12px 10px;
+    }
+
+    .edit-task {
+      margin-bottom: 9px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 7px rgba(0,0,0,.06);
+    }
+
+    .edit-top,
+    .edit-bottom {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .edit-bottom {
+      margin-top: 7px;
+    }
+
+    .edit-task input {
+      min-width: 0;
+      padding: 7px 6px;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      font-size: 15px;
+    }
+
+    .edit-time {
+      width: 78px;
+    }
+
+    .edit-emoji {
+      width: 48px;
+      text-align: center;
+    }
+
+    .edit-name {
+      flex: 1;
+    }
+
+    .edit-min {
+      width: 65px;
+    }
+
+    .edit-small-btn {
+      padding: 7px 9px;
+      border: none;
+      border-radius: 9px;
+      background: #e9ecef;
+      color: #444;
+      font-size: 15px;
+    }
+
+    .edit-delete {
+      background: #f9844a;
+      color: #fff;
+    }
+
+    .editor-actions {
+      padding: 8px 16px 30px;
+    }
+
+    .editor-actions .btn {
+      margin: 5px 2px;
+      font-size: 16px;
+    }
+
+    .btn-add {
+      background: #577590;
+    }
+
+    .btn-save {
+      background: #90be6d;
+    }
+
+    .btn-reset {
+      background: #f9844a;
+    }
+
+    .btn-close {
+      background: #777;
+    }
+
+    .pin-box {
+      margin: 10px 16px 25px;
+      padding: 13px;
+      background: #fff;
+      border-radius: 15px;
+    }
+
+    .pin-box input {
+      width: 120px;
+      padding: 7px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 420px) {
+      .task-name {
+        font-size: 16px;
+      }
+
+      .task-emoji {
+        font-size: 27px;
+      }
+
+      .btn {
+        padding: 9px 8px;
+        font-size: 13px;
+      }
+
+      .timer-number {
+        font-size: 68px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div id="app"></div>
 
-<div class="timer-box" id="timerBox">
-  <div class="tname" id="timerName"></div>
-  <div class="big" id="timerText">10:00</div>
-  <div id="timerHint" style="font-size:20px;opacity:.8;"></div>
-  <button class="btn btn-check" id="timerStop">结束</button>
-</div>
+  <div id="app"></div>
 
-<div class="celebrate" id="celebrate">
-  <div class="big">🎉</div>
-  <h2>今天全部完成啦！</h2>
-  <p style="font-size:20px;">你真棒！去玩吧～</p>
-  <button class="btn btn-check" onclick="hideCelebrate()">好的</button>
-</div>
+  <!-- 计时器 -->
+  <div class="timer-mask" id="timerMask">
+    <div class="timer-content">
+      <div class="timer-title" id="timerTitle">开始计时</div>
+      <div class="timer-number" id="timerNumber">10:00</div>
+      <div class="timer-tip" id="timerTip">屏幕将尽量保持常亮</div>
+      <button class="btn btn-finish" id="timerFinishBtn">完成并打卡</button>
+      <button class="btn btn-cancel" id="timerCancelBtn">取消计时</button>
+    </div>
+  </div>
 
-<script>
-(function () {
-  var STORE_PLANS = 'daka_plans_v4';
-  var STORE_DONE  = 'daka_done_v1';
-  var STORE_PIN   = 'daka_pin_v1';
-  var STORE_OVERRIDE = 'daka_override_v1';
-  var STORE_MUZZY = 'daka_muzzy_v1';
+  <!-- 家长编辑 -->
+  <div class="editor-mask" id="editorMask">
+    <div class="editor-header">
+      <h2>家长编辑当天计划</h2>
+      <input class="editor-date" type="date" id="editorDate">
+    </div>
 
-  /* 默认任务：格式 emoji|名称|分钟(0表示不计时) */
-  var DEFAULT_PLANS = {
-    normal: [
-      '🎵|早饭听英语儿歌|0',
-      '🍪|到家休息 + 听英语 / Muzzy 音频|0',
-      '📖|语文作业|10',
-      '🔤|拼音声调练习|10',
-      '👀|翻一翻明天的语文|3',
-      '🚰|课间：喝水上厕所动一动|10',
-      '🔢|数学作业 + 练习册|20',
-      '🎮|自由玩耍|0',
-      '🍚|晚饭|0',
-      '💃|和妈妈一起跳舞|15',
-      '🪢|和妈妈一起跳绳|20',
-      '🎒|自己收书包|0',
-      '🎧|洗漱听英语|10',
-      '📚|睡前阅读|30',
-      '😴|九点上床|0'
-    ],
-    english: [
-      '🎵|早饭听英语儿歌|0',
-      '🎧|地铁上戴耳机听儿歌|0',
-      '🇬🇧|上英语课|0',
-      '📖|语文数学读一读|15',
-      '👀|翻一翻明天课本|3',
-      '🎒|自己收书包|0',
-      '😴|九点上床|0'
-    ],
-    weekend: [
-      '🎵|早饭听英语儿歌|0',
-      '🔤|拼音综合练习|15',
-      '📝|补练习册|15',
-      '📖|本周生字读一遍|5',
-      '📺|看 Muzzy 一集|20',
-      '💃|和妈妈一起跳舞|25',
-      '🪢|和妈妈一起跳绳|20',
-      '📚|阅读|30',
-      '😴|九点上床|0'
-    ]
-  };
-  var TYPE_NAME = { normal: '普通日', english: '英语课日', weekend: '周末' };
-  var WEEK_CN = ['日','一','二','三','四','五','六'];
-  var MUZZY_ROUNDS = 2;
+    <div class="editor-tip">
+      可以单独修改当天的时间、任务名称、表情和计时时长。<br>
+      “计时分钟”填写 <b>0</b>，代表该任务不需要计时。
+    </div>
 
-  function load(key, def) {
-    try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch (e) { return def; }
-  }
-  function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+    <div class="editor-list" id="editorList"></div>
 
-  function dateKey(d) {
-    var m = d.getMonth() + 1, day = d.getDate();
-    return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
-  }
-  function autoType(d) {
-    var w = d.getDay();
-    if (w === 0 || w === 6) return 'weekend';
-    if (w === 2 || w === 5) return 'english';
-    return 'normal';
-  }
-  function todayType() {
-    var ov = load(STORE_OVERRIDE, {});
-    var k = dateKey(new Date());
-    return ov[k] || autoType(new Date());
-  }
-  function parsePlan(lines) {
-    var out = [];
-    for (var i = 0; i < lines.length; i++) {
-      var p = lines[i].split('|');
-      if (p.length < 2) continue;
-      out.push({ e: p[0].trim(), n: p[1].trim(), m: parseInt(p[2] || '0', 10) || 0 });
-    }
-    return out;
-  }
+    <div class="editor-actions">
+      <button class="btn btn-add" id="addTaskBtn">＋ 添加任务</button>
+      <button class="btn btn-save" id="savePlanBtn">保存这一天</button>
+      <button class="btn btn-reset" id="resetPlanBtn">恢复当天默认计划</button>
+      <button class="btn btn-close" id="closeEditorBtn">关闭</button>
+    </div>
 
-  var plans = load(STORE_PLANS, DEFAULT_PLANS);
-  var doneMap = load(STORE_DONE, {});
-  var muzzy = load(STORE_MUZZY, { total: 6, counts: [0,0,0,0,0,0] });
-  var app = document.getElementById('app');
+    <div class="pin-box">
+      <b>修改家长密码</b><br><br>
+      <input id="newPinInput" type="tel" maxlength="10" placeholder="输入新密码">
+      <button class="edit-small-btn" id="changePinBtn">保存密码</button>
+    </div>
+  </div>
 
-  function muzzyNext() {
-    var min = 999, idx = -1;
-    for (var i = 0; i < muzzy.total; i++) {
-      var c = muzzy.counts[i] || 0;
-      if (c < min) { min = c; idx = i; }
-    }
-    return { idx: idx, count: min };
-  }
+  <script>
+    (function () {
 
-  function render() {
-    var now = new Date();
-    var key = dateKey(now);
-    var type = todayType();
-    var tasks = parsePlan(plans[type] || []);
-    var done = doneMap[key] || [];
-    var doneCount = 0;
-    for (var i = 0; i < tasks.length; i++) if (done.indexOf(i) >= 0) doneCount++;
-    var pct = tasks.length ? Math.round(doneCount / tasks.length * 100) : 0;
+      /* 数据保存在当前设备浏览器中 */
+      var KEY_DAY_PLANS = 'study_day_plans_v10';
+      var KEY_DONE = 'study_done_v10';
+      var KEY_PIN = 'study_parent_pin_v10';
 
-    var html = '';
-    html += '<div class="header"><h1>⭐ 今日学习打卡</h1>';
-    html += '<div class="date">' + (now.getMonth() + 1) + '月' + now.getDate() + '日 星期' + WEEK_CN[now.getDay()] + '</div>';
-    html += '<div class="type">' + TYPE_NAME[type] + '</div></div>';
-    html += '<div class="progress"><div style="width:' + pct + '%"></div></div>';
-    html += '<div class="stars">已完成 ' + doneCount + ' / ' + tasks.length + '　';
-    for (var s = 0; s < doneCount; s++) html += '⭐';
-    html += '</div>';
+      var TYPE_NAME = {
+        normal: '普通日',
+        english: '英语课日',
+        weekend: '周末'
+      };
 
-    html += '<div class="list">';
-    for (var j = 0; j < tasks.length; j++) {
-      var t = tasks[j], isDone = done.indexOf(j) >= 0;
-      html += '<div class="task' + (isDone ? ' done' : '') + '">';
-      html += '<div class="emoji">' + t.e + '</div>';
-      html += '<div class="info"><div class="name">' + t.n + '</div>';
-      if (t.m > 0) html += '<div class="min">约 ' + t.m + ' 分钟</div>';
-      html += '</div>';
-      if (t.m > 0 && !isDone) html += '<button class="btn btn-timer" data-timer="' + j + '">⏱ 计时</button>';
-      html += '<button class="btn btn-check" data-check="' + j + '">' + (isDone ? '✔ 完成' : '完成') + '</button>';
-      html += '</div>';
-    }
-    html += '</div>';
-
-    html += '<div class="week">';
-    var monday = new Date(now); var wd = now.getDay() === 0 ? 7 : now.getDay();
-    monday.setDate(now.getDate() - (wd - 1));
-    for (var d = 0; d < 7; d++) {
-      var dd = new Date(monday); dd.setDate(monday.getDate() + d);
-      var k2 = dateKey(dd); var cnt = (doneMap[k2] || []).length;
-      html += '<div class="d' + (k2 === key ? ' today' : '') + '"><b>' + WEEK_CN[dd.getDay()] + '</b>' +
-              '<span>' + (cnt > 0 ? '⭐' + cnt : '·') + '</span></div>';
-    }
-    html += '</div>';
-
-    var nx = muzzyNext();
-    html += '<div class="muzzy"><div class="title">📺 Muzzy 进度</div>';
-    if (nx.count >= MUZZY_ROUNDS) {
-      html += '<div class="hint">🎉 全部看完 ' + MUZZY_ROUNDS + ' 遍啦！可以进入下一级或换动画</div>';
-    } else {
-      html += '<div class="hint">本周该看：<b>第 ' + (nx.idx + 1) + ' 集</b>（第 ' + (nx.count + 1) + ' 遍）　看完点一下格子</div>';
-    }
-    html += '<div class="eps">';
-    for (var e = 0; e < muzzy.total; e++) {
-      var c = muzzy.counts[e] || 0;
-      var cls = 'ep' + (e === nx.idx && nx.count < MUZZY_ROUNDS ? ' next' : '') + (c >= MUZZY_ROUNDS ? ' full' : '');
-      var star = ''; for (var q = 0; q < c; q++) star += '⭐';
-      html += '<div class="' + cls + '" data-ep="' + e + '"><b>第' + (e + 1) + '集</b><span>' + (star || '　') + '</span></div>';
-    }
-    html += '</div></div>';
-
-    html += '<div class="foot"><button id="btnSettings">家长设置</button></div>';
-    html += '<div class="settings" id="settings"></div>';
-
-    app.innerHTML = html;
-
-    var checks = app.querySelectorAll('[data-check]');
-    for (var c2 = 0; c2 < checks.length; c2++) checks[c2].onclick = onCheck;
-    var timers = app.querySelectorAll('[data-timer]');
-    for (var tt = 0; tt < timers.length; tt++) timers[tt].onclick = onTimer;
-    var eps = app.querySelectorAll('[data-ep]');
-    for (var ee = 0; ee < eps.length; ee++) eps[ee].onclick = onEp;
-    document.getElementById('btnSettings').onclick = openSettings;
-
-    if (tasks.length && doneCount === tasks.length && !window.__celebrated) {
-      window.__celebrated = true;
-      document.getElementById('celebrate').style.display = 'block';
-    }
-  }
-
-  function onCheck() {
-    var idx = parseInt(this.getAttribute('data-check'), 10);
-    var key = dateKey(new Date());
-    var done = doneMap[key] || [];
-    var pos = done.indexOf(idx);
-    if (pos >= 0) done.splice(pos, 1); else done.push(idx);
-    doneMap[key] = done;
-    save(STORE_DONE, doneMap);
-    render();
-  }
-
-  function onEp() {
-    var e = parseInt(this.getAttribute('data-ep'), 10);
-    var c = muzzy.counts[e] || 0;
-    if (confirm('第 ' + (e + 1) + ' 集看完了吗？（点击"确定"记一遍）')) {
-      muzzy.counts[e] = c + 1;
-      save(STORE_MUZZY, muzzy);
-      render();
-    }
-  }
-
-  var timerId = null, remain = 0;
-  function beep() {
-    try {
-      var AC = window.AudioContext || window.webkitAudioContext;
-      var ctx = new AC();
-      var t = ctx.currentTime;
-      for (var i = 0; i < 3; i++) {
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.frequency.value = 880; g.gain.value = 0.4;
-        o.start(t + i * 0.5); o.stop(t + i * 0.5 + 0.3);
+      function makeTask(id, time, emoji, name, minutes) {
+        return {
+          id: id,
+          time: time,
+          emoji: emoji,
+          name: name,
+          minutes: minutes
+        };
       }
-    } catch (e) {}
-  }
-  function fmt(sec) {
-    var m = Math.floor(sec / 60), s = sec % 60;
-    return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
-  }
-  function onTimer() {
-    var idx = parseInt(this.getAttribute('data-timer'), 10);
-    var tasks = parsePlan(plans[todayType()] || []);
-    var t = tasks[idx];
-    remain = t.m * 60;
-    document.getElementById('timerName').textContent = t.e + ' ' + t.n;
-    document.getElementById('timerText').textContent = fmt(remain);
-    document.getElementById('timerHint').textContent = '加油！';
-    document.getElementById('timerBox').style.display = 'block';
-    if (timerId) clearInterval(timerId);
-    timerId = setInterval(function () {
-      remain--;
-      document.getElementById('timerText').textContent = fmt(Math.max(remain, 0));
-      if (remain <= 0) {
-        clearInterval(timerId); timerId = null;
-        document.getElementById('timerHint').textContent = '⏰ 时间到！可以点"完成"啦';
-        beep();
-      }
-    }, 1000);
-  }
-  document.getElementById('timerStop').onclick = function () {
-    if (timerId) clearInterval(timerId);
-    timerId = null;
-    document.getElementById('timerBox').style.display = 'none';
-  };
-  window.hideCelebrate = function () {
-    document.getElementById('celebrate').style.display = 'none';
-  };
 
-  function openSettings() {
-    var pin = load(STORE_PIN, '1234');
-    var input = prompt('请输入家长密码');
-    if (input !== pin) { if (input !== null) alert('密码不对'); return; }
-    var box = document.getElementById('settings');
-    var key = dateKey(new Date());
-    var ov = load(STORE_OVERRIDE, {});
-    var cur = ov[key] || '';
-    var h = '<p class="tip">每行一个任务，格式：表情|任务名|分钟（0 表示不计时）。改完点保存。</p>';
-    h += '<div class="row">今天临时改为：<select id="ovSel">' +
-         '<option value=""' + (cur === '' ? ' selected' : '') + '>按星期自动</option>' +
-         '<option value="normal"' + (cur === 'normal' ? ' selected' : '') + '>普通日</option>' +
-         '<option value="english"' + (cur === 'english' ? ' selected' : '') + '>英语课日</option>' +
-         '<option value="weekend"' + (cur === 'weekend' ? ' selected' : '') + '>周末</option>' +
-         '</select></div>';
-    h += '<h3>普通日（一、三、四）</h3><textarea id="pNormal">' + (plans.normal || []).join('\n') + '</textarea>';
-    h += '<h3>英语课日（二、五）</h3><textarea id="pEnglish">' + (plans.english || []).join('\n') + '</textarea>';
-    h += '<h3>周末</h3><textarea id="pWeekend">' + (plans.weekend || []).join('\n') + '</textarea>';
-    h += '<h3>Muzzy 设置</h3>';
-    h += '<div class="row">总集数：<input id="muzzyTotal" type="tel" value="' + muzzy.total + '" style="width:70px;">　' +
-         '<span class="tip">第一级 6 集；以后看第二级可改为 12</span></div>';
-    h += '<div class="row"><button class="btn btn-timer" id="resetMuzzy">重置 Muzzy 进度</button></div>';
-    h += '<div class="row">修改家长密码：<input id="newPin" type="tel" placeholder="留空不改" style="width:120px;"></div>';
-    h += '<div class="row"><button class="btn btn-check" id="saveSet">保存</button> ' +
-         '<button class="btn btn-timer" id="resetSet">恢复默认任务</button> ' +
-         '<button class="btn" style="background:#999" id="closeSet">关闭</button></div>';
-    h += '<p class="tip">如需清空今天的打卡记录，把今天所有任务点成"未完成"即可。</p>';
-    box.innerHTML = h;
-    box.style.display = 'block';
-    window.scrollTo(0, document.body.scrollHeight);
+      /* 默认任务模板：以后每天都可以单独改 */
+      function defaultPlan(type) {
+        if (type === 'english') {
+          return [
+            makeTask('e1', '07:00', '🎵', '早饭听英语儿歌', 0),
+            makeTask('e2', '15:30', '🇬🇧', '放学后去英语课', 0),
+            makeTask('e3', '20:10', '📖', '完成必须完成的语数作业', 15),
+            makeTask('e4', '20:25', '🎒', '自己收书包', 0),
+            makeTask('e5', '20:40', '😴', '上床准备睡觉', 0)
+          ];
+        }
 
-    document.getElementById('saveSet').onclick = function () {
-      function lines(id) {
-        var arr = document.getElementById(id).value.split('\n'), out = [];
-        for (var i = 0; i < arr.length; i++) if (arr[i].trim()) out.push(arr[i].trim());
-        return out;
+        if (type === 'weekend') {
+          return [
+            makeTask('w1', '09:30', '🔤', '拼音综合练习', 15),
+            makeTask('w2', '09:50', '📝', '补一点练习册', 15),
+            makeTask('w3', '10:10', '📖', '本周生字或课文读一读', 10),
+            makeTask('w4', '15:00', '📺', '看 Muzzy / 英语视频', 20),
+            makeTask('w5', '19:00', '💃', '和妈妈一起跳舞', 20),
+            makeTask('w6', '19:20', '🪢', '和妈妈一起跳绳', 20),
+            makeTask('w7', '20:15', '📚', '睡前阅读或听故事', 20),
+            makeTask('w8', '20:45', '😴', '上床准备睡觉', 0)
+          ];
+        }
+
+        return [
+          makeTask('n1', '15:30', '🍪', '到家休息 + 听英语音频', 0),
+          makeTask('n2', '16:00', '📖', '完成语文作业', 10),
+          makeTask('n3', '16:10', '🔤', '拼音声调练习', 10),
+          makeTask('n4', '16:20', '👀', '语文复习或预习', 5),
+          makeTask('n5', '16:25', '🚰', '课间喝水、上厕所、活动', 10),
+          makeTask('n6', '16:35', '🔢', '完成数学作业或少量练习', 20),
+          makeTask('n7', '17:00', '🎮', '自由玩耍', 0),
+          makeTask('n8', '18:00', '🍚', '晚饭', 0),
+          makeTask('n9', '19:00', '💃', '和妈妈一起跳舞', 15),
+          makeTask('n10', '19:15', '🪢', '和妈妈一起跳绳', 20),
+          makeTask('n11', '19:40', '🎒', '洗漱、收书包、听英语', 0),
+          makeTask('n12', '20:15', '📚', '睡前阅读或听故事', 20),
+          makeTask('n13', '20:45', '😴', '上床准备睡觉', 0)
+        ];
       }
-      plans = { normal: lines('pNormal'), english: lines('pEnglish'), weekend: lines('pWeekend') };
-      save(STORE_PLANS, plans);
-      var sel = document.getElementById('ovSel').value;
-      var ov2 = load(STORE_OVERRIDE, {});
-      if (sel) ov2[key] = sel; else delete ov2[key];
-      save(STORE_OVERRIDE, ov2);
-      var nt = parseInt(document.getElementById('muzzyTotal').value, 10);
-      if (nt > 0 && nt <= 30) {
-        muzzy.total = nt;
-        while (muzzy.counts.length < nt) muzzy.counts.push(0);
-        save(STORE_MUZZY, muzzy);
+
+      function clone(obj) {
+        return JSON.parse(JSON.stringify(obj));
       }
-      var np = document.getElementById('newPin').value.trim();
-      if (np) save(STORE_PIN, np);
-      window.__celebrated = false;
-      alert('已保存');
-      render();
-    };
-    document.getElementById('resetMuzzy').onclick = function () {
-      if (confirm('确定把 Muzzy 进度清零？')) {
-        muzzy.counts = [];
-        for (var i = 0; i < muzzy.total; i++) muzzy.counts.push(0);
-        save(STORE_MUZZY, muzzy);
+
+      function loadJSON(key, fallback) {
+        try {
+          var text = localStorage.getItem(key);
+          return text ? JSON.parse(text) : fallback;
+        } catch (e) {
+          return fallback;
+        }
+      }
+
+      function saveJSON(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      function getPin() {
+        return localStorage.getItem(KEY_PIN) || '1234';
+      }
+
+      function localDateString(date) {
+        var y = date.getFullYear();
+        var m = String(date.getMonth() + 1).padStart(2, '0');
+        var d = String(date.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + d;
+      }
+
+      function getTypeByDate(dateStr) {
+        var date = new Date(dateStr + 'T12:00:00');
+        var weekday = date.getDay();
+
+        if (weekday === 0 || weekday === 6) return 'weekend';
+        if (weekday === 2 || weekday === 5) return 'english';
+        return 'normal';
+      }
+
+      function escapeHTML(text) {
+        return String(text || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      var dayPlans = loadJSON(KEY_DAY_PLANS, {});
+      var doneMap = loadJSON(KEY_DONE, {});
+      var selectedDate = localDateString(new Date());
+
+      function getPlan(dateStr) {
+        if (dayPlans[dateStr]) {
+          return clone(dayPlans[dateStr]);
+        }
+
+        return clone(defaultPlan(getTypeByDate(dateStr)));
+      }
+
+      function getDone(dateStr) {
+        return doneMap[dateStr] || [];
+      }
+
+      function saveDone(dateStr, doneList) {
+        doneMap[dateStr] = doneList;
+        saveJSON(KEY_DONE, doneMap);
+      }
+
+      function toggleDone(dateStr, taskId) {
+        var done = getDone(dateStr).slice();
+        var index = done.indexOf(taskId);
+
+        if (index >= 0) {
+          done.splice(index, 1);
+        } else {
+          done.push(taskId);
+        }
+
+        saveDone(dateStr, done);
         render();
       }
-    };
-    document.getElementById('resetSet').onclick = function () {
-      if (confirm('确定恢复默认任务？')) {
-        plans = JSON.parse(JSON.stringify(DEFAULT_PLANS));
-        save(STORE_PLANS, plans);
-        render();
-      }
-    };
-    document.getElementById('closeSet').onclick = function () { box.style.display = 'none'; };
-  }
 
-  render();
-  window.__lastKey = dateKey(new Date());
-  setInterval(function () {
-    var k = dateKey(new Date());
-    if (k !== window.__lastKey) { window.__lastKey = k; window.__celebrated = false; render(); }
-  }, 60000);
-})();
-</script>
+      /* ===== 每周星星统计 ===== */
+
+      function getWeekDates(dateStr) {
+        var date = new Date(dateStr + 'T12:00:00');
+        var weekday = date.getDay();
+        var daysFromMonday = weekday === 0 ? 6 : weekday - 1;
+
+        var monday = new Date(date);
+        monday.setDate(date.getDate() - daysFromMonday);
+
+        var dates = [];
+
+        for (var i = 0; i < 7; i++) {
+          var current = new Date(monday);
+          current.setDate(monday.getDate() + i);
+          dates.push(localDateString(current));
+        }
+
+        return dates;
+      }
+
+      function shortDate(dateStr) {
+        var date = new Date(dateStr + 'T12:00:00');
+        return (date.getMonth() + 1) + '/' + date.getDate();
+      }
+
+      function getWeekStats(dateStr) {
+        var dates = getWeekDates(dateStr);
+        var totalStars = 0;
+        var actualStars = 0;
+        var dayStats = [];
+
+        dates.forEach(function (day) {
+          var tasks = getPlan(day);
+          var done = getDone(day);
+
+          var validTaskIds = tasks.map(function (task) {
+            return task.id;
+          });
+
+          var actualForDay = done.filter(function (id) {
+            return validTaskIds.indexOf(id) >= 0;
+          }).length;
+
+          totalStars += tasks.length;
+          actualStars += actualForDay;
+
+          dayStats.push({
+            date: day,
+            total: tasks.length,
+            actual: actualForDay
+          });
+        });
+
+        return {
+          dates: dates,
+          totalStars: totalStars,
+          actualStars: actualStars,
+          dayStats: dayStats
+        };
+      }
+
+      /* ===== 主页面 ===== */
+
+      function render() {
+        var tasks = getPlan(selectedDate);
+        var done = getDone(selectedDate);
+
+        var completed = tasks.filter(function (task) {
+          return done.indexOf(task.id) >= 0;
+        }).length;
+
+        var percent = tasks.length
+          ? Math.round(completed / tasks.length * 100)
+          : 0;
+
+        var type = getTypeByDate(selectedDate);
+        var weekStats = getWeekStats(selectedDate);
+
+        var weekRate = weekStats.totalStars
+          ? Math.round(weekStats.actualStars / weekStats.totalStars * 100)
+          : 0;
+
+        var weekNames = ['一', '二', '三', '四', '五', '六', '日'];
+        var today = localDateString(new Date());
+
+        var html = '';
+
+        html += '<div class="header">';
+        html += '<h1>⭐ 今日学习打卡</h1>';
+        html += '<div class="date-row">';
+        html += '<input type="date" id="viewDate" value="' + selectedDate + '">';
+        html += '</div>';
+        html += '<div class="day-type">' + TYPE_NAME[type] + '</div>';
+        html += '</div>';
+
+        html += '<div class="progress-wrap">';
+        html += '<div class="progress-bar" style="width:' + percent + '%"></div>';
+        html += '</div>';
+
+        html += '<div class="progress-text">';
+        html += '完成 ' + completed + ' / ' + tasks.length + ' 项';
+        if (completed > 0) {
+          html += '　' + '⭐'.repeat(completed);
+        }
+        html += '</div>';
+
+        html += '<div class="tip-box">做完一项点“完成”；有分钟数的任务可以点“计时”。</div>';
+
+        html += '<div class="task-list">';
+
+        tasks.forEach(function (task) {
+          var isDone = done.indexOf(task.id) >= 0;
+
+          html += '<div class="task ' + (isDone ? 'done' : '') + '">';
+          html += '<div class="task-time">' + escapeHTML(task.time || '') + '</div>';
+          html += '<div class="task-emoji">' + escapeHTML(task.emoji || '⭐') + '</div>';
+
+          html += '<div class="task-main">';
+          html += '<div class="task-name">' + escapeHTML(task.name) + '</div>';
+
+          if (Number(task.minutes) > 0) {
+            html += '<div class="task-duration">约 ' + Number(task.minutes) + ' 分钟</div>';
+          }
+
+          html += '</div>';
+
+          if (Number(task.minutes) > 0 && !isDone) {
+            html += '<button class="btn btn-timer" data-timer="' + task.id + '">⏱ 计时</button>';
+          }
+
+          html += '<button class="btn btn-check" data-check="' + task.id + '">';
+          html += isDone ? '✔ 完成' : '完成';
+          html += '</button>';
+
+          html += '</div>';
+        });
+
+        html += '</div>';
+
+        html += '<div class="finish-box" style="display:' +
+          (tasks.length > 0 && completed === tasks.length ? 'block' : 'none') +
+          ';">🎉 今天的计划完成啦！辛苦了！</div>';
+
+        html += '<div class="week-card">';
+        html += '<div class="week-title">⭐ 本周成长星星</div>';
+        html += '<div class="week-date">';
+        html += shortDate(weekStats.dates[0]) + ' ～ ' + shortDate(weekStats.dates[6]);
+        html += '</div>';
+
+        html += '<div class="week-stars">';
+        html += '已得到 ⭐' + weekStats.actualStars + '　/　应得 ⭐' + weekStats.totalStars;
+        html += '</div>';
+
+        html += '<div class="week-rate">本周完成率：' + weekRate + '%</div>';
+
+        html += '<div class="week-mini-bar">';
+        html += '<div class="week-mini-bar-inner" style="width:' + weekRate + '%"></div>';
+        html += '</div>';
+
+        html += '<div class="week-days">';
+
+        weekStats.dayStats.forEach(function (item, index) {
+          var dayClass = item.date === today ? ' today' : '';
+
+          html += '<div class="week-day' + dayClass + '">';
+          html += '<b>周' + weekNames[index] + '</b>';
+          html += '<span>⭐' + item.actual + '/' + item.total + '</span>';
+          html += '</div>';
+        });
+
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div class="foot">';
+        html += '<button class="parent-btn" id="parentEditBtn">家长编辑当天计划</button>';
+        html += '</div>';
+
+        document.getElementById('app').innerHTML = html;
+
+        document.getElementById('viewDate').addEventListener('change', function () {
+          selectedDate = this.value;
+          render();
+        });
+
+        document.getElementById('parentEditBtn').addEventListener('click', openParentEditor);
+
+        var checkButtons = document.querySelectorAll('[data-check]');
+        checkButtons.forEach(function (button) {
+          button.addEventListener('click', function () {
+            toggleDone(selectedDate, this.getAttribute('data-check'));
+          });
+        });
+
+        var timerButtons = document.querySelectorAll('[data-timer]');
+        timerButtons.forEach(function (button) {
+          button.addEventListener('click', function () {
+            var taskId = this.getAttribute('data-timer');
+            var currentTasks = getPlan(selectedDate);
+
+            var task = currentTasks.find(function (item) {
+              return item.id === taskId;
+            });
+
+            if (task) {
+              startTimer(selectedDate, task);
+            }
+          });
+        });
+      }
+
+      /* ===== 计时器 + 尽量保持屏幕常亮 ===== */
+
+      var timerState = null;
+      var timerInterval = null;
+      var wakeLock = null;
+
+      function formatTime(seconds) {
+        var min = Math.floor(seconds / 60);
+        var sec = seconds % 60;
+
+        return String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+      }
+
+      async function requestWakeLock() {
+        var tip = document.getElementById('timerTip');
+
+        try {
+          if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+
+            if (wakeLock) {
+              tip.textContent = '计时中，屏幕保持常亮';
+              wakeLock.addEventListener('release', function () {
+                wakeLock = null;
+              });
+            }
+          } else {
+            tip.textContent = '计时中，请不要手动锁屏';
+          }
+        } catch (error) {
+          tip.textContent = '计时中，请不要手动锁屏';
+        }
+      }
+
+      async function releaseWakeLock() {
+        try {
+          if (wakeLock) {
+            await wakeLock.release();
+            wakeLock = null;
+          }
+        } catch (e) {}
+      }
+
+      function beep() {
+        try {
+          var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          var audio = new AudioContextClass();
+          var now = audio.currentTime;
+
+          for (var i = 0; i < 3; i++) {
+            var oscillator = audio.createOscillator();
+            var gain = audio.createGain();
+
+            oscillator.connect(gain);
+            gain.connect(audio.destination);
+
+            oscillator.frequency.value = 880;
+            gain.gain.setValueAtTime(0.2, now + i * 0.4);
+
+            oscillator.start(now + i * 0.4);
+            oscillator.stop(now + i * 0.4 + 0.2);
+          }
+        } catch (e) {}
+      }
+
+      function startTimer(dateStr, task) {
+        timerState = {
+          date: dateStr,
+          taskId: task.id,
+          remaining: Number(task.minutes) * 60,
+          running: true
+        };
+
+        document.getElementById('timerMask').classList.add('show');
+        document.getElementById('timerTitle').textContent = task.emoji + ' ' + task.name;
+        document.getElementById('timerNumber').textContent = formatTime(timerState.remaining);
+        document.getElementById('timerTip').textContent = '正在开启保持亮屏…';
+        document.getElementById('timerFinishBtn').textContent = '完成并打卡';
+
+        requestWakeLock();
+
+        if (timerInterval) {
+          clearInterval(timerInterval);
+        }
+
+        timerInterval = setInterval(function () {
+          if (!timerState || !timerState.running) return;
+
+          timerState.remaining -= 1;
+
+          document.getElementById('timerNumber').textContent =
+            formatTime(Math.max(0, timerState.remaining));
+
+          if (timerState.remaining <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerState.running = false;
+
+            document.getElementById('timerTip').textContent =
+              '⏰ 时间到！点击“完成并打卡”';
+
+            document.getElementById('timerFinishBtn').textContent =
+              '时间到，完成打卡';
+
+            beep();
+            releaseWakeLock();
+          }
+        }, 1000);
+      }
+
+      function closeTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+        }
+
+        timerInterval = null;
+        timerState = null;
+
+        releaseWakeLock();
+
+        document.getElementById('timerMask').classList.remove('show');
+      }
+
+      document.getElementById('timerFinishBtn').addEventListener('click', function () {
+        if (!timerState) return;
+
+        var done = getDone(timerState.date).slice();
+
+        if (done.indexOf(timerState.taskId) < 0) {
+          done.push(timerState.taskId);
+          saveDone(timerState.date, done);
+        }
+
+        closeTimer();
+        render();
+      });
+
+      document.getElementById('timerCancelBtn').addEventListener('click', function () {
+        closeTimer();
+      });
+
+      document.addEventListener('visibilitychange', function () {
+        if (
+          document.visibilityState === 'visible' &&
+          timerState &&
+          timerState.running &&
+          !wakeLock
+        ) {
+          requestWakeLock();
+        }
+      });
+
+      /* ===== 家长编辑 ===== */
+
+      var editorDate = selectedDate;
+      var editorTasks = [];
+
+      function openParentEditor() {
+        var input = prompt('请输入家长密码');
+
+        if (input === null) return;
+
+        if (input !== getPin()) {
+          alert('密码不正确');
+          return;
+        }
+
+        editorDate = selectedDate;
+        editorTasks = getPlan(editorDate);
+
+        document.getElementById('editorDate').value = editorDate;
+        document.getElementById('editorMask').classList.add('show');
+
+        renderEditor();
+      }
+
+      function renderEditor() {
+        var html = '';
+
+        editorTasks.forEach(function (task) {
+          html += '<div class="edit-task" data-id="' + task.id + '">';
+
+          html += '<div class="edit-top">';
+          html += '<input class="edit-time" type="time" data-field="time" value="' +
+            escapeHTML(task.time || '') + '">';
+
+          html += '<input class="edit-emoji" data-field="emoji" value="' +
+            escapeHTML(task.emoji || '') + '">';
+
+          html += '<input class="edit-name" data-field="name" value="' +
+            escapeHTML(task.name || '') + '">';
+
+          html += '</div>';
+
+          html += '<div class="edit-bottom">';
+          html += '<span style="font-size:14px;color:#666;">计时分钟：</span>';
+
+          html += '<input class="edit-min" type="number" min="0" max="180" data-field="minutes" value="' +
+            Number(task.minutes || 0) + '">';
+
+          html += '<button class="edit-small-btn" data-action="up" data-id="' + task.id + '">↑</button>';
+          html += '<button class="edit-small-btn" data-action="down" data-id="' + task.id + '">↓</button>';
+          html += '<button class="edit-small-btn edit-delete" data-action="delete" data-id="' + task.id + '">删除</button>';
+
+          html += '</div>';
+          html += '</div>';
+        });
+
+        document.getElementById('editorList').innerHTML = html;
+      }
+
+      document.getElementById('editorDate').addEventListener('change', function () {
+        editorDate = this.value;
+        editorTasks = getPlan(editorDate);
+        renderEditor();
+      });
+
+      document.getElementById('editorList').addEventListener('input', function (event) {
+        var target = event.target;
+        var field = target.getAttribute('data-field');
+
+        if (!field) return;
+
+        var card = target.closest('.edit-task');
+        var taskId = card.getAttribute('data-id');
+
+        var task = editorTasks.find(function (item) {
+          return item.id === taskId;
+        });
+
+        if (!task) return;
+
+        if (field === 'minutes') {
+          task[field] = Math.max(0, Number(target.value || 0));
+        } else {
+          task[field] = target.value;
+        }
+      });
+
+      document.getElementById('editorList').addEventListener('click', function (event) {
+        var button = event.target.closest('[data-action]');
+
+        if (!button) return;
+
+        var action = button.getAttribute('data-action');
+        var taskId = button.getAttribute('data-id');
+
+        var index = editorTasks.findIndex(function (item) {
+          return item.id === taskId;
+        });
+
+        if (index < 0) return;
+
+        if (action === 'delete') {
+          editorTasks.splice(index, 1);
+        }
+
+        if (action === 'up' && index > 0) {
+          var before = editorTasks[index - 1];
+          editorTasks[index - 1] = editorTasks[index];
+          editorTasks[index] = before;
+        }
+
+        if (action === 'down' && index < editorTasks.length - 1) {
+          var after = editorTasks[index + 1];
+          editorTasks[index + 1] = editorTasks[index];
+          editorTasks[index] = after;
+        }
+
+        renderEditor();
+      });
+
+      document.getElementById('addTaskBtn').addEventListener('click', function () {
+        editorTasks.push({
+          id: 'custom_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+          time: '',
+          emoji: '⭐',
+          name: '新任务',
+          minutes: 0
+        });
+
+        renderEditor();
+      });
+
+      document.getElementById('savePlanBtn').addEventListener('click', function () {
+        var validTasks = editorTasks.filter(function (task) {
+          return String(task.name || '').trim() !== '';
+        });
+
+        dayPlans[editorDate] = clone(validTasks);
+        saveJSON(KEY_DAY_PLANS, dayPlans);
+
+        var validIds = validTasks.map(function (task) {
+          return task.id;
+        });
+
+        var oldDone = getDone(editorDate);
+
+        var newDone = oldDone.filter(function (id) {
+          return validIds.indexOf(id) >= 0;
+        });
+
+        saveDone(editorDate, newDone);
+
+        selectedDate = editorDate;
+
+        document.getElementById('editorMask').classList.remove('show');
+
+        render();
+        alert('这一天的计划已经保存');
+      });
+
+      document.getElementById('resetPlanBtn').addEventListener('click', function () {
+        var ok = confirm('确定恢复为这一天原本的默认计划吗？当天的自定义修改会消失。');
+
+        if (!ok) return;
+
+        delete dayPlans[editorDate];
+        saveJSON(KEY_DAY_PLANS, dayPlans);
+
+        editorTasks = getPlan(editorDate);
+        renderEditor();
+      });
+
+      document.getElementById('closeEditorBtn').addEventListener('click', function () {
+        document.getElementById('editorMask').classList.remove('show');
+      });
+
+      document.getElementById('changePinBtn').addEventListener('click', function () {
+        var newPin = document.getElementById('newPinInput').value.trim();
+
+        if (newPin.length < 4) {
+          alert('密码至少设置 4 位');
+          return;
+        }
+
+        localStorage.setItem(KEY_PIN, newPin);
+        document.getElementById('newPinInput').value = '';
+
+        alert('家长密码已修改');
+      });
+
+      render();
+
+    })();
+  </script>
+
 </body>
 </html>
